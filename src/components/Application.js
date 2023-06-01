@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, effect, useEffect } from "react";
 import axios from "axios";
 
 import "components/Application.scss";
@@ -22,18 +22,20 @@ export default function Application(props) {
   const dailyAppointments = getAppointmentsForDay(state, state.day)
 
   // fetch days and appointment data from API
-  Promise.all([
-    axios.get('/api/days'),
-    axios.get('/api/appointments'),
-    axios.get('/api/interviewers')
-  ]).then((all) => {
-    setState(state => ({
-      ...state, 
-      days: all[0].data, 
-      appointments: all[1].data,
-      interviewers: all[2].data
-    }))
-  });
+  useEffect(() => {
+    Promise.all([
+      axios.get('/api/days'),
+      axios.get('/api/appointments'),
+      axios.get('/api/interviewers')
+    ]).then((all) => {
+      setState(state => ({
+        ...state, 
+        days: all[0].data, 
+        appointments: all[1].data,
+        interviewers: all[2].data
+      }))
+    });
+  }, [])
 
   return (
     <main className="layout">
