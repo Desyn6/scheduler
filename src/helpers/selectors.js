@@ -41,6 +41,5 @@ export function getInterviewersForDay(state, day) {
       el.interviewers.forEach((itvNum) => results.push(interviewers[itvNum]))
     }
   }
-  console.log(results)
   return results;
 }
