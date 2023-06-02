@@ -7,6 +7,7 @@ import useVisualMode from "hooks/useVisualMode";
 import Form from "components/Appointment/Form";
 
 export default function Appointment(props) {
+  // visual rendering for interface
   const SHOW = "SHOW";
   const EMPTY = "EMPTY";
   const CREATE = "CREATE";
@@ -14,6 +15,18 @@ export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
+  
+  // function for saving interviews
+  function save(name, interviewer) {
+    const interview = {
+      student: name,
+      interviewer
+    };
+    //pass new interview object
+    props.bookInterview(props.id, interview)
+    //set visual mode to show 
+    transition(SHOW)
+  }
   
   return <article className="appointment">
     <Header time={props.time} />
@@ -26,6 +39,7 @@ export default function Appointment(props) {
       <Form 
         interviewers={props.interviewers}
         onCancel={() => {back()}}
+        onSave={save}
       />
     )}
     {mode === SHOW && (
