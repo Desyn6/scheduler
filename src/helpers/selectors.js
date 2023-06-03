@@ -29,7 +29,6 @@ export function getInterview(state, interview) {
 export function getInterviewersForDay(state, day) {
   //... returns an array of appointments for that day
   const days = state.days;
-  const appointments = state.appointments;
   const interviewers = state.interviewers;
   const results = [];
 
