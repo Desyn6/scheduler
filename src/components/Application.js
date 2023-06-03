@@ -60,12 +60,16 @@ export default function Application(props) {
       ...state.
       appointments
     }
-    // set interview of appointments copy to null
-    appointments[id].interview = null;
+
 
     // delete interview and set state
-    return (axios.delete(`/api/appointments/${id}`))
-      .then(setState({...state, appointments}));
+    return (
+      axios.delete(`/api/appointments/${id}`)
+        .then(() => {
+          appointments[id].interview = null;          
+          setState({...state, appointments});
+        })
+    )
   }
 
   return (
