@@ -31,6 +31,14 @@ export default function Appointment(props) {
     // PUT interview and set show visual mode
     props.bookInterview(props.id, interview)
       .then(() => transition(SHOW));
+  };
+
+  function onDelete() {
+    transition(SAVING);
+    
+    // call delete Interview API function
+    props.deleteInterview(props.id)
+      .then(() => transition(EMPTY))
   }
   
   return <article className="appointment">
@@ -51,6 +59,7 @@ export default function Appointment(props) {
       <Show
         student={props.interview.student}
         interviewer={props.interview.interviewer}
+        onDelete={onDelete}
       />
     )}
     {mode === SAVING && (

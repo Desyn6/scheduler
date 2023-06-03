@@ -54,6 +54,20 @@ export default function Application(props) {
     )
   };
 
+  async function deleteInterview(id) {
+    // set copy of appointments array
+    const appointments = {
+      ...state.
+      appointments
+    }
+    // set interview of appointments copy to null
+    appointments[id].interview = null;
+
+    // delete interview and set state
+    return (axios.delete(`/api/appointments/${id}`))
+      .then(setState({...state, appointments}));
+  }
+
   return (
     <main className="layout">
       <section className="sidebar">
@@ -90,6 +104,7 @@ export default function Application(props) {
                 interview={interview}
                 interviewers={interviewers}
                 bookInterview={bookInterview}
+                deleteInterview={deleteInterview}
               />
             )
           })
