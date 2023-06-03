@@ -11,14 +11,15 @@ import {
 } from "helpers/selectors";
 import useApplicationData from "hooks/useApplicationData";
 
-export default function Application(props) {
+export default function Application() {
   const {
     state,
-    setDay,
     bookInterview,
-    deleteInterview
+    deleteInterview,
+    setDay,
   } = useApplicationData();
 
+  // const spots = getSpots(state, id)
   const interviewers = getInterviewersForDay(state, state.day);
 
   // write appointment for selected day

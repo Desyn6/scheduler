@@ -29,40 +29,75 @@ export default function useApplicationData() {
     });
   }, []);
 
-  async function bookInterview(id, interview) {
+  function bookInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
-    }
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
     }
 
     // write interview to DB
     return (
       axios.put(`/api/appointments/${id}`, {interview})
-        .then(setState({...state, appointments}))
+        .then(() => {
+          const appointments = {
+            ...state.appointments,
+            [id]: appointment
+          };
+          const days = writeSpotsToDays(appointments, id)   
+          setState({
+            ...state, 
+            appointments,
+            days
+          })
+        })
     )
   };
 
-  async function deleteInterview(id) {
+  function deleteInterview(id) {
     // set copy of appointments array
     const appointments = {
-      ...state.
-      appointments
+      ...state.appointments
     }
-
 
     // delete interview and set state
     return (
       axios.delete(`/api/appointments/${id}`)
         .then(() => {
-          appointments[id].interview = null;          
-          setState({...state, appointments});
+          appointments[id].interview = null;  
+          const days = writeSpotsToDays(appointments, id)    
+          setState({
+            ...state, 
+            appointments, 
+            days});
         })
     )
   }
 
+  function writeSpotsToDays(appointments, id) {
+    const days = [...state.days];
+    let slots;
+    let freeSpots = 0;
+    let dayIndex;
+
+    // find day slot ID numbers, and dayIndex in days array
+    for (let i = 0; i < days.length; i++) {
+      if (days[i].appointments.includes(id)) {
+        slots = [...days[i].appointments]
+        dayIndex = i;
+        break;
+      };
+    }
+
+    // Find number of free slots
+    for (const slot of slots) {
+      if (appointments[slot].interview === null) {freeSpots++}
+    }
+
+    // set free slots in day
+    days[dayIndex].spots = freeSpots;
+
+    return days
+  }
+  
   return { state, setDay, bookInterview, deleteInterview }
 }
