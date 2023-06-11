@@ -9,7 +9,8 @@ import {
   prettyDOM,
   getAllByTestId,
   getByAltText,
-  getByPlaceholderText
+  getByPlaceholderText,
+  queryByText
 } from "@testing-library/react";
 
 import Application from "components/Application";
@@ -30,21 +31,35 @@ describe("Application", () => {
   });
 
   it("loads data, books and interview and reduces the spots remaining for the first day by 1", async () => {
+    // Render container
     const { container } = render(<Application />);
 
+    // Wait for DOM to load
     await waitForElement(() => getByText(container, "Archie Cohen"));
 
+    // Find appointments using test ID
     const appointments = getAllByTestId(container, "appointment");
     const appointment = appointments[0];
     
+    // User interactions 
     fireEvent.click(getByAltText(appointment, "Add"));
 
     fireEvent.click(getByAltText(appointment, "Sylvia Palmer"))
     fireEvent.change(getByPlaceholderText(appointment, /enter student name/i), {
       target: { value: "Lydia Miller-Jones" }
     });
-    fireEvent.click(getByText(appointment, "Save"));
 
-    console.log(prettyDOM(appointment));
+    fireEvent.click(getByText(appointment, "Save"));
+    
+    // Wait for Saving to finish
+    await waitForElement(() => getByText(appointment, "Lydia Miller-Jones"));
+    
+    // Find Monday in day list
+    const day = getAllByTestId(container, "day")
+      .find(day => queryByText(day, "Monday"));
+
+    // Check that Monday states no spots remaining
+    expect(getByText(day, /no spots remaining/i)).toBeInTheDocument();
+
   });
 });
