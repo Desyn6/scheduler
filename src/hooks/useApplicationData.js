@@ -44,10 +44,11 @@ export default function useApplicationData() {
             [id]: appointment
           };
           const days = writeSpotsToDays(appointments, id)   
-          setState({
-            ...state, 
-            appointments,
-            days
+          setState(prev => {
+            let newState = {...prev}
+            newState.appointments = appointments;
+            newState.days = days;
+            return newState;
           })
         })
     )
@@ -65,10 +66,12 @@ export default function useApplicationData() {
         .then(() => {
           appointments[id].interview = null;  
           const days = writeSpotsToDays(appointments, id)    
-          setState({
-            ...state, 
-            appointments, 
-            days});
+          setState(prev => {
+            let newState = {...prev}
+            newState.appointments = appointments;
+            newState.days = days;
+            return newState
+          });
         })
     )
   }
