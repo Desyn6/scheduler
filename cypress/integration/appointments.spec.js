@@ -1,5 +1,5 @@
 describe("Appointment", () => {
-  xit("should book an interview", () => {
+  it("should book an interview", () => {
     // resets database
     cy.request("GET", "/api/debug/reset")
 
@@ -26,7 +26,7 @@ describe("Appointment", () => {
     cy.contains(".appointment__card--show", "Sylvia Palmer");
   });
 
-  xit("should edit an interview", () => {
+  it("should edit an interview", () => {
     // resets database
     cy.request("GET", "/api/debug/reset");
 
