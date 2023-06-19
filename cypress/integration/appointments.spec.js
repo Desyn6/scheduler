@@ -78,5 +78,9 @@ describe("Appointment", () => {
 
     // Sees that 2 spots are free to confirm that appointment is deleted
     cy.contains('.day-list__item--selected', "2 spots remaining")
+
+    // check that Archie Cohen name isn't visible
+    cy.contains(".appointment__card--show", "Archie Cohen")
+    .should("not.exist");
   });
 });
